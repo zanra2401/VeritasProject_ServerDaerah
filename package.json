@@ -1,0 +1,30 @@
+{
+  "name": "veritasproject_serverdaerah",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zanra2401/VeritasProject_ServerDaerah.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zanra2401/VeritasProject_ServerDaerah/issues"
+  },
+  "homepage": "https://github.com/zanra2401/VeritasProject_ServerDaerah#readme",
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
