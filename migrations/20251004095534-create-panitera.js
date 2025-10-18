@@ -16,10 +16,6 @@ module.exports = {
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4
       },
-      nama_panitera: {  
-        allowNull: false,
-        type: Sequelize.STRING
-      },
       id_putusan: {
         allowNull: false,
         type: Sequelize.UUID,
@@ -27,6 +23,20 @@ module.exports = {
           model: 'putusan',
           key: 'id'
         }
+      },
+      nama_panitera: {  
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      created_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW
+      },
+      updated_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW
       }
     });
 

@@ -20,6 +20,16 @@ module.exports = {
       nama_hakim: {  
         allowNull: false,
         type: Sequelize.STRING
+      },
+      cratead_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW
+      },
+      updated_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW
       }
     });
   },

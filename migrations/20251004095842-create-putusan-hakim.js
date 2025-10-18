@@ -27,10 +27,23 @@ module.exports = {
           key: 'id'
         }
       },
-      primaryKey: {
-        fields: ['id_putusan', 'id_hakim']
+      created_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('NOW')
+      },
+      updated_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('NOW')
       }
     });
+
+    await queryInterface.addConstraint("putusan_hakim", {
+      fields: ['id_putusan', 'id_hakim'],
+      type: 'primary key',
+      name: 'pk_putusan_hakim'
+    })
   },
 
   async down (queryInterface, Sequelize) {
