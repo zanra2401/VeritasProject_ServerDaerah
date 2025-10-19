@@ -9,13 +9,13 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-    await queryInterface.createTable('putusan_hakim', {
+    await queryInterface.createTable('PutusanHakim', {
  
       id_putusan: {
         allowNull: false,
         type: Sequelize.UUID,
         references: {
-          model: 'putusan',
+          model: 'Putusan',
           key: 'id'
         }
       },
@@ -23,23 +23,23 @@ module.exports = {
         allowNull: false,
         type: Sequelize.UUID,
         references: {
-          model: 'hakim',
+          model: 'Hakim',
           key: 'id'
         }
       },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.fn('NOW')
+        defaultValue: Sequelize.NOW
       },
       updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.fn('NOW')
+        defaultValue: Sequelize.NOW
       }
     });
 
-    await queryInterface.addConstraint("putusan_hakim", {
+    await queryInterface.addConstraint("PutusanHakim", {
       fields: ['id_putusan', 'id_hakim'],
       type: 'primary key',
       name: 'pk_putusan_hakim'
@@ -53,5 +53,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
+    await queryInterface.dropTable('PutusanHakim');
   }
 };

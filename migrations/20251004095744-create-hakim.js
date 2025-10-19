@@ -10,7 +10,7 @@ module.exports = {
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      * 
      */
-    await queryInterface.createTable('hakim', {
+    await queryInterface.createTable('Hakim', {
       id: {
         allowNull: false,
         type: Sequelize.UUID,
@@ -21,7 +21,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      cratead_at: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW
@@ -41,5 +41,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
+    await queryInterface.dropTable("Hakim");
   }
 };

@@ -9,20 +9,12 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-    await queryInterface.createTable('panitera', {
+    await queryInterface.createTable('Panitera', {
       id: {
         allowNull: false,
         type: Sequelize.UUID,
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4
-      },
-      id_putusan: {
-        allowNull: false,
-        type: Sequelize.UUID,
-        references: {
-          model: 'putusan',
-          key: 'id'
-        }
       },
       nama_panitera: {  
         allowNull: false,
@@ -49,5 +41,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
+    await queryInterface.dropTable("Panitera");
   }
 };

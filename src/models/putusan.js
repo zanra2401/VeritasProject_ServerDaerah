@@ -40,6 +40,18 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: false,
     },
+    id_hakim_ketua: {
+      type: DataTypes.UUID,
+      allowNull: false
+    },
+    id_panitera: {
+      type: DataTypes.UUID,
+      allowNull: false
+    },
+    id_penuntut_umum: {
+      type: DataTypes.UUID,
+      allowNull: false 
+    },
     tanggal_upload: {
       type: DataTypes.DATE,
       allowNull: false,

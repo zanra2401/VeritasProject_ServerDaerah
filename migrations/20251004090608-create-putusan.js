@@ -10,18 +10,22 @@ module.exports = {
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
 
-    await queryInterface.createTable('putusan', {
+    await queryInterface.createTable('Putusan', {
       id: {
         allowNull: false,
         type: Sequelize.UUID,
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4
       },
-      nomor_putusan: {  
+      nomor: {  
         allowNull: false,
         type: Sequelize.STRING
       },
-      tinkat_proses: {
+      tingkat_proses: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      klasifikasi: {
         allowNull: false,
         type: Sequelize.STRING
       },
@@ -37,19 +41,36 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
-      tangagl_upload: {
+      tanggal_upload: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        defaultValue: Sequelize.NOW
       },
-      tanggal_update: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        defaultValue:  Sequelize.NOW
+      },
+      updated_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW
       },
       amar_putusan: {
         allowNull: false,
         type: Sequelize.TEXT
+      },
+      id_hakim_ketua: {
+        allowNull: false,
+        type: Sequelize.UUID
+      },
+      id_panitera: {
+        allowNull: false,
+        type: Sequelize.UUID
+      },
+      id_penuntut_umum: {
+        allowNull: false,
+        type: Sequelize.UUID
       },
       amar_lainya: {
         allowNull: true,
@@ -65,7 +86,7 @@ module.exports = {
       },
       lembaga_id: {
         allowNull: false,
-        type: Sequelize.UUID,
+        type: Sequelize.STRING,
       }
     });
 
@@ -78,5 +99,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
+    await queryInterface.dropTable("Putusan");
   }
 };
