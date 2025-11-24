@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Panitera extends Model {
     /**
@@ -20,15 +21,11 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV4,
       allowNull: false
     },
-    nama_panitera: DataTypes.STRING,
-    id_putusan: {
-        allowNull: false,
-        type: Sequelize.UUID,
-        references: {
-          model: 'putusan',
-          key: 'id'
-        }
-      },
+    nama: DataTypes.STRING,
+    deleted_at: {
+      allowNull: true,
+      type: DataTypes.DATE
+    },
     created_at: {
       allowNull: false,
       type: DataTypes.DATE,
@@ -42,6 +39,11 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Panitera',
+    tableName: 'Panitera',
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+    paranoid: true,
+    deletedAt: 'deleted_at'
   });
   return Panitera;
 };

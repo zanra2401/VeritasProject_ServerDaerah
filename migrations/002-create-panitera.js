@@ -8,18 +8,21 @@ module.exports = {
      *
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
-     * 
      */
-    await queryInterface.createTable('Hakim', {
+    await queryInterface.createTable('Panitera', {
       id: {
         allowNull: false,
         type: Sequelize.UUID,
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4
       },
-      nama_hakim: {  
+      nama: {  
         allowNull: false,
         type: Sequelize.STRING
+      },
+      deleted_at: {
+        allowNull: true,
+        type: Sequelize.Date
       },
       created_at: {
         allowNull: false,
@@ -32,6 +35,7 @@ module.exports = {
         defaultValue: Sequelize.NOW
       }
     });
+
   },
 
   async down (queryInterface, Sequelize) {
@@ -41,6 +45,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-    await queryInterface.dropTable("Hakim");
+    await queryInterface.dropTable("Panitera");
   }
 };

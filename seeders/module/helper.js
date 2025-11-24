@@ -3,7 +3,7 @@
 const { v4: uuidv4 } = require("uuid");
 
 module.exports = {
-  appendPutusan: (data, row, id, id_hakim_ketua, id_panitera, id_penuntut_umum) => {
+  appendPutusan: (data, row, id, id_hakim_ketua, id_panitera, id_penuntut_umum, id_kata_kunci, id_klasifikasi) => {
     const parseTanggal = (str) => {
       if (!str) return null;
       const bulanMap = {
@@ -24,7 +24,8 @@ module.exports = {
       id,
       nomor: row[2],
       tingkat_proses: row[3],
-      klasifikasi: row[4],
+      id_klasifikasi: id_klasifikasi,
+      id_kata_kunci: id_kata_kunci,
       tanggal_musyawarah: parseTanggal(row[16]),
       tahun: row[6],
       tanggal_putusan: parseTanggal(row[17]),
@@ -52,7 +53,7 @@ module.exports = {
     if (!dataPanitera.has(namaPanitera)) {
       dataPanitera.set(namaPanitera, {
         id: id_panitera,
-        nama_panitera: row[12]?.replace(/"/g, "").trim() || null,
+        nama: row[12]?.replace("Panitera Pengganti", "").replace(":", "").replace(/"/g, "").trim() || null,
         created_at: new Date(),
         updated_at: new Date()
       });
@@ -72,7 +73,7 @@ module.exports = {
     if (!dataHakim.has(namaHakim)) {
       dataHakim.set(namaHakim, {
         id: id_hakim,
-        nama_hakim: row[10]?.split(" ").slice(2).join(" ").trim() || null,
+        nama: row[10]?.split(" ").slice(2).join(" ").trim() || null,
         created_at: new Date(),
         updated_at: new Date()
       });
@@ -85,6 +86,7 @@ module.exports = {
     hakimAnggota.forEach((element) => {
       const namaHakim = element
         .replace("Br", "")
+        .replace("Hakim Anggota")
         .trim()
         .split(" ")
         .slice(2)
@@ -100,7 +102,7 @@ module.exports = {
       } else {
         dataHakim.set(namaHakim, {
           id: anggotaId,
-          nama_hakim: namaHakim,
+          nama: namaHakim,
           created_at: new Date(),
           updated_at: new Date()
         });
@@ -126,7 +128,7 @@ module.exports = {
       } else {
         dataTerdakwa.set(key, {
           id: terdakwaId,
-          nama_terdakwa: nama || null,
+          nama: nama || null,
           created_at: new Date(),
           updated_at: new Date()
         });
@@ -143,7 +145,7 @@ module.exports = {
     if (!dataPenuntutUmum.has(namaPenuntut)) {
       dataPenuntutUmum.set(namaPenuntut, {
         id: id_penuntut_umum,
-        nama_penuntut_umum: row[1]?.replace(/"/g, "").trim() || null,
+        nama: row[1]?.replace(/"/g, "").trim() || null,
         created_at: new Date(),
         updated_at: new Date()
       });
@@ -166,5 +168,27 @@ module.exports = {
       created_at: new Date(),
       updated_at: new Date()
     });
+  },
+
+  appendKataKunci: (dataKataKunci, id_kata_kunci, row) => {
+    if (!dataKataKunci.has(row[5].trim().toLowerCase())) {
+      dataKataKunci.set(row[5].trim().toLowerCase(), {
+        id: id_kata_kunci,
+        nama: row[5],
+        created_at: new Date(),
+        updated_at: new Date()
+      })
+    }
+  },
+
+  appendKlasifikasi: (dataKlasifikasi, id_klasifikasi, row) => {
+    if (!dataKlasifikasi.has(row[4]?.trim().toLowerCase())) {
+      dataKlasifikasi.set(row[4].trim().toLowerCase(), {
+        id: id_klasifikasi,
+        nama: row[4],
+        created_at: new Date(),
+        updated_at: new Date()
+      });
+    }
   }
 };

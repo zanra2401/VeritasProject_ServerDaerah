@@ -13,10 +13,12 @@ module.exports = {
     const dataPutusan = [];
     const dataPanitera = new Map();
     const dataPutusanHakim = [];
+    const dataKataKunci = new Map();
     const dataTerdakwaPutusan = [];
     const dataTerdakwa = new Map();
     const dataPenuntutUmum = new Map();
     const dataHakim = new Map();
+    const dataKlasifikasi = new Map();
 
     await new Promise((resolve, reject) => {
       const inputStream = fs.createReadStream(inputStreamPath, "utf-8");
@@ -35,13 +37,19 @@ module.exports = {
             const namaHakim = item[10]?.split(" ").slice(2).join(" ").trim().toLowerCase();
             const namaPenuntut = item[1]?.replace(/"/g, "").trim().toLowerCase();
             const namaPanitera = item[12]?.replace(/"/g, "").trim().toLowerCase();
+            const kataKunci = item[5]?.trim().toLowerCase();
+            const klasifikasi = item[4]?.trim().toLowerCase();
 
             const putusanId = uuidv4();
             const penuntutId = dataPenuntutUmum.get(namaPenuntut)?.id || uuidv4();
             const hakimId = dataHakim.get(namaHakim)?.id || uuidv4();
             const paniteraId = dataPanitera.get(namaPanitera)?.id || uuidv4();
+            const kataKunciId = dataKataKunci.get(kataKunci)?.id || uuidv4();
+            const klasifikasiId = dataKlasifikasi.get(klasifikasi)?.id || uuidv4();
 
             helper.appendHakimKetua(dataHakim, hakimId, item);
+            helper.appendKataKunci(dataKataKunci, kataKunciId, item);
+            helper.appendKlasifikasi(dataKlasifikasi, klasifikasiId, item);
             helper.appendPanitera(dataPanitera, paniteraId, item);
             helper.appendPenuntutUmum(dataPenuntutUmum, penuntutId, item);
             helper.appendPutusan(
@@ -50,7 +58,9 @@ module.exports = {
               putusanId,
               hakimId,
               paniteraId,
-              penuntutId
+              penuntutId,
+              kataKunciId,
+              klasifikasiId
             );
             helper.appendTerdakwa(dataTerdakwa, dataTerdakwaPutusan, putusanId, item);
             helper.appendHakimAnggota(
@@ -60,40 +70,48 @@ module.exports = {
               item
             );
           } catch (err) {
-            console.error("❌ Error parsing row:", err);
+            console.error("Error parsing row:", err);
           }
         })
         .on("end", async () => {
           try {
-            console.log("✅ CSV dibaca, mulai insert data...");
-
+            console.log("CSV dibaca, mulai insert data...");
+            console.log(dataKataKunci);
             const dataHakimArr = Array.from(dataHakim.values());
+            const dataKataKunciArr = Array.from(dataKataKunci.values());
+            const dataKlasifikasiArr = Array.from(dataKlasifikasi.values());
             const dataPaniteraArr = Array.from(dataPanitera.values());
             const dataPenuntutUmumArr = Array.from(dataPenuntutUmum.values());
             const dataTerdakwaArr = Array.from(dataTerdakwa.values());
 
             await queryInterface.bulkInsert("Hakim", dataHakimArr);
-            console.log("✅ Hakim inserted");
+            console.log("Hakim inserted");
+
+            await queryInterface.bulkInsert("KataKunci", dataKataKunciArr);
+            console.log("Kata Kunci inserted");
+
+            await queryInterface.bulkInsert("Klasifikasi", dataKlasifikasiArr);
+            console.log("Klasifikasi inserted");
 
             await queryInterface.bulkInsert("Panitera", dataPaniteraArr);
-            console.log("✅ Panitera inserted");
+            console.log("Panitera inserted");
 
             await queryInterface.bulkInsert("Terdakwa", dataTerdakwaArr);
-            console.log("✅ Terdakwa inserted");
+            console.log("Terdakwa inserted");
 
             await queryInterface.bulkInsert("PenuntutUmum", dataPenuntutUmumArr);
-            console.log("✅ Penuntut Umum inserted");
+            console.log("Penuntut Umum inserted");
 
             await queryInterface.bulkInsert("Putusan", dataPutusan);
-            console.log("✅ Putusan inserted");
+            console.log("Putusan inserted");
 
             await queryInterface.bulkInsert("PutusanHakim", dataPutusanHakim);
-            console.log("✅ PutusanHakim inserted");
+            console.log("PutusanHakim inserted");
 
             await queryInterface.bulkInsert("TerdakwaPutusan", dataTerdakwaPutusan);
-            console.log("✅ TerdakwaPutusan inserted");
+            console.log("TerdakwaPutusan inserted");
 
-            console.log("🎉 Semua data berhasil diinsert!");
+            console.log("Semua data berhasil diinsert!");
             resolve();
           } catch (err) {
             console.error("❌ Error saat insert ke database:", err);

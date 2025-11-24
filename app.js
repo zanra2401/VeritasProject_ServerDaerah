@@ -1,9 +1,17 @@
-import express from 'express';
+
+const express = require("express");
+require("dotenv").config();
+const router = require(__dirname + "/src/routes/router.js");
+
 const app = express();
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
+
+app.use(express.json());
+app.use(router);
+
+
+app.listen(process.env.PORT, () => {
+    console.log("Server is starting on port " + process.env.PORT);
 });
 
-
-export default app;
+module.exports = app;

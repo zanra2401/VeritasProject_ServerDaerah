@@ -11,17 +11,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-
-      PutusanHakim.belongsTo(models.Putusan, {
-        foreignKey: "id_putusan",
-        as: 'putusan'
-      });
-
-      PutusanHakim.belongsTo(models.Hakim, {
-        foreignKey: "id_hakim",
-        as: "hakim"
-      })
-
     }
   }
   PutusanHakim.init({
@@ -32,6 +21,9 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'PutusanHakim',
+    tableName: 'PutusanHakim',
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
   });
   return PutusanHakim;
 };

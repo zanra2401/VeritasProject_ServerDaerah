@@ -13,6 +13,12 @@ module.exports = (sequelize, DataTypes) => {
      */   
     static associate(models) {
       // define association here
+      this.belongsToMany(models.Putusan, {
+        through: models.PutusanHakim,
+        foreignKey: 'id_hakim',
+        otherKey: 'id_putusan',
+        as: 'putusan'
+      });
     }
   }
 
@@ -23,7 +29,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       primaryKey: true
     },
-    nama_hakim: DataTypes.STRING,
+    nama: DataTypes.STRING,
+    deleted_at: {
+      allowNull: true,
+      type: DataTypes.DATE
+    },
     created_at: {
       allowNull: false,
       type: DataTypes.DATE,
@@ -37,6 +47,11 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Hakim',
+    tableName: 'Hakim',
+    paranoid: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+    deletedAt: 'deleted_at'
   });
 
   return Hakim;

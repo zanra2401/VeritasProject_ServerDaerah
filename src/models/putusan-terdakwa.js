@@ -13,13 +13,21 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  putusan - terdakwa.init({
-    id: DataTypes.UUID,
-    id_terdakwa: DataTypes.UUID,
-    id_putusan: DataTypes.UUID
+  PutusanTerdakwa.init({
+    id_terdakwa: {
+      type: DataTypes.UUID,
+      allowNull: false
+    },
+    id_putusan: {
+      type: DataTypes.UUID,
+      allowNull: false
+    }
   }, {
     sequelize,
-    modelName: 'putusan-terdakwa',
+    modelName: 'PutusanTerdakwa',
+    tableName: 'PutusanTerdakwa',
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
   });
-  return putusan - terdakwa;
+  return PutusanTerdakwa;
 };

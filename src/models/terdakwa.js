@@ -11,13 +11,29 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.belongsToMany(models.Putusan, {
+        through: models.PutusanTerdakwa,
+        foreignKey: 'id_terdakwa',
+        otherKey: 'id_putusan',
+        as: 'putusan'
+      });
     }
   }
   Terdakwa.init({
-    nama_terdakwa: DataTypes.STRING
+    id: {
+      primaryKey: true,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false
+    },
+    nama: DataTypes.STRING,
+    
   }, {
     sequelize,
     modelName: 'Terdakwa',
+    tableName: 'Terdakwa',
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
   });
   return Terdakwa;
 };
