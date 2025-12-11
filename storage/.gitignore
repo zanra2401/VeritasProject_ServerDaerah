@@ -1,0 +1,9 @@
+# .gitignore untuk storage files
+
+# Ignore semua file di storage (jangan commit file upload)
+storage/putusan/*
+storage/temp/*
+
+# Tapi commit folder struktur
+!storage/putusan/.gitkeep
+!storage/temp/.gitkeep

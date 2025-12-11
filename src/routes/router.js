@@ -8,6 +8,7 @@ const putusanController = require(__dirname + "/../controllers/putusanController
 const kataKunciController = require(__dirname + "/../controllers/kataKunciController.js");
 const klasifikasiController = require(__dirname + "/../controllers/klasifikasiController.js");
 const authorizationMiddleware = require(__dirname + "/../middlewares/authorizationMiddleware.js");
+const { uploadPutusan } = require(__dirname + "/../middlewares/uploadMiddleware.js");
 
 const router = express.Router();
 
@@ -545,5 +546,29 @@ router.delete(url_start + "/putusan/:id",
     authorizationMiddleware.apiKeyMiddleware,
     authorizationMiddleware.jwtMiddleware,
     putusanController.deletePutusan);
+
+/**
+ * @route POST /putusan/:id/upload
+ * @description Upload dokumen putusan (PDF/DOC)
+ * @param {string} id - Putusan ID (UUID)
+ * @body {file} dokumen - File dokumen putusan (PDF/DOC/DOCX, max 10MB)
+ * @requires JWT Token
+ * @returns {object} Upload info dengan file path
+ */
+router.post(url_start + "/putusan/:id/upload",
+    authorizationMiddleware.apiKeyMiddleware,
+    authorizationMiddleware.jwtMiddleware,
+    uploadPutusan.single('dokumen'),
+    putusanController.uploadDokumen);
+
+/**
+ * @route GET /putusan/:id/download
+ * @description Download dokumen putusan
+ * @param {string} id - Putusan ID (UUID)
+ * @returns {file} File dokumen putusan
+ */
+router.get(url_start + "/putusan/:id/download",
+    authorizationMiddleware.apiKeyMiddleware,
+    putusanController.downloadDokumen);
 
 module.exports = router

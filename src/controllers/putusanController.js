@@ -2,6 +2,8 @@
 
 const { Putusan, Hakim, Panitera, KataKunci, PenuntutUmum, Terdakwa } = require(__dirname + "/../models");
 const { Op } = require('sequelize');
+const path = require('path');
+const fs = require('fs');
 
 module.exports = {
     // Get all Putusan with pagination
@@ -166,6 +168,111 @@ module.exports = {
                 "data": []
             });
         } catch (err) {
+            return res.status(500).type("json").json({
+                "error": true,
+                "message": "Server Error",
+                "data": []
+            });
+        }
+    },
+
+    // Upload dokumen putusan
+    uploadDokumen: async (req, res) => {
+        try {
+            const { id } = req.params;
+            
+            if (!req.file) {
+                return res.status(400).type("json").json({
+                    "error": true,
+                    "message": "No file uploaded",
+                    "data": []
+                });
+            }
+
+            const putusan = await Putusan.findByPk(id);
+            if (!putusan) {
+                // Hapus file jika putusan tidak ditemukan
+                if (req.file.path) fs.unlinkSync(req.file.path);
+                return res.status(404).type("json").json({
+                    "error": true,
+                    "message": "Putusan not found",
+                    "data": []
+                });
+            }
+
+            // Hapus file lama jika ada
+            if (putusan.url_dokumen) {
+                const oldFilePath = path.join(__dirname, '../../', putusan.url_dokumen);
+                if (fs.existsSync(oldFilePath)) {
+                    fs.unlinkSync(oldFilePath);
+                }
+            }
+
+            // Update path dokumen di database
+            const fileUrl = `/storage/putusan/${req.file.filename}`;
+            await putusan.update({ url_dokumen: fileUrl });
+
+            return res.status(200).type("json").json({
+                "error": false,
+                "message": "Document uploaded successfully",
+                "data": {
+                    "id": putusan.id,
+                    "url_dokumen": fileUrl,
+                    "filename": req.file.filename,
+                    "size": req.file.size
+                }
+            });
+        } catch (err) {
+            // Hapus file yang di-upload jika terjadi error
+            if (req.file && req.file.path && fs.existsSync(req.file.path)) {
+                fs.unlinkSync(req.file.path);
+            }
+            console.error(err);
+            return res.status(500).type("json").json({
+                "error": true,
+                "message": "Server Error",
+                "data": []
+            });
+        }
+    },
+
+    // Download dokumen putusan
+    downloadDokumen: async (req, res) => {
+        try {
+            const { id } = req.params;
+
+            const putusan = await Putusan.findByPk(id);
+            if (!putusan) {
+                return res.status(404).type("json").json({
+                    "error": true,
+                    "message": "Putusan not found",
+                    "data": []
+                });
+            }
+
+            if (!putusan.url_dokumen) {
+                return res.status(404).type("json").json({
+                    "error": true,
+                    "message": "No document available for this putusan",
+                    "data": []
+                });
+            }
+
+            const filePath = path.join(__dirname, '../../', putusan.url_dokumen);
+
+            if (!fs.existsSync(filePath)) {
+                return res.status(404).type("json").json({
+                    "error": true,
+                    "message": "File not found",
+                    "data": []
+                });
+            }
+
+            // Send file
+            const filename = `Putusan_${putusan.nomor.replace(/\//g, '-')}.${path.extname(filePath).substring(1)}`;
+            res.download(filePath, filename);
+        } catch (err) {
+            console.error(err);
             return res.status(500).type("json").json({
                 "error": true,
                 "message": "Server Error",

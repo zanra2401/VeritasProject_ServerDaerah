@@ -48,12 +48,11 @@ module.exports = {
 
   appendPanitera: (dataPanitera, id_panitera, row) => {
     const namaPanitera = row[12]?.replace(/"/g, "").trim().toLowerCase();
-    if (!namaPanitera) return;
-
+    // Insert meski kosong, agar foreign key tetap valid
     if (!dataPanitera.has(namaPanitera)) {
       dataPanitera.set(namaPanitera, {
         id: id_panitera,
-        nama: row[12]?.replace("Panitera Pengganti", "").replace(":", "").replace(/"/g, "").trim() || null,
+        nama: row[12]?.replace("Panitera Pengganti", "").replace(":", "").replace(/"/g, "").trim() || "Panitera",
         created_at: new Date(),
         updated_at: new Date()
       });
@@ -68,12 +67,11 @@ module.exports = {
       .trim()
       .toLowerCase();
 
-    if (!namaHakim) return;
-
+    // Insert meski kosong, agar foreign key tetap valid
     if (!dataHakim.has(namaHakim)) {
       dataHakim.set(namaHakim, {
         id: id_hakim,
-        nama: row[10]?.split(" ").slice(2).join(" ").trim() || null,
+        nama: row[10]?.split(" ").slice(2).join(" ").trim() || "Hakim Ketua",
         created_at: new Date(),
         updated_at: new Date()
       });
@@ -140,12 +138,11 @@ module.exports = {
 
   appendPenuntutUmum: (dataPenuntutUmum, id_penuntut_umum, row) => {
     const namaPenuntut = row[1]?.replace(/"/g, "").trim().toLowerCase();
-    if (!namaPenuntut) return;
-
+    // Insert meski kosong, agar foreign key tetap valid
     if (!dataPenuntutUmum.has(namaPenuntut)) {
       dataPenuntutUmum.set(namaPenuntut, {
         id: id_penuntut_umum,
-        nama: row[1]?.replace(/"/g, "").trim() || null,
+        nama: row[1]?.replace(/"/g, "").trim() || "Penuntut Umum",
         created_at: new Date(),
         updated_at: new Date()
       });
@@ -171,10 +168,12 @@ module.exports = {
   },
 
   appendKataKunci: (dataKataKunci, id_kata_kunci, row) => {
-    if (!dataKataKunci.has(row[5].trim().toLowerCase())) {
-      dataKataKunci.set(row[5].trim().toLowerCase(), {
+    const kataKunci = row[5]?.trim().toLowerCase();
+    // Insert meski kosong, agar foreign key tetap valid
+    if (!dataKataKunci.has(kataKunci)) {
+      dataKataKunci.set(kataKunci, {
         id: id_kata_kunci,
-        nama: row[5],
+        nama: row[5]?.trim() || "Kata Kunci",
         created_at: new Date(),
         updated_at: new Date()
       })

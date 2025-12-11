@@ -30,7 +30,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       id_kata_kunci: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.UUID,
         references: {
           model: "KataKunci",
@@ -38,7 +38,7 @@ module.exports = {
         }
       },
       tanggal_putusan: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE
       },
       tahun: {
@@ -46,7 +46,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       tanggal_musyawarah: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE
       },
       tanggal_upload: {
@@ -73,7 +73,7 @@ module.exports = {
         type: Sequelize.TEXT
       },
       id_hakim_ketua: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.UUID,
         references: {
           model: "Hakim",
@@ -81,12 +81,20 @@ module.exports = {
         }
       },
       id_panitera: {
-        allowNull: false,
-        type: Sequelize.UUID
+        allowNull: true,
+        type: Sequelize.UUID,
+        references: {
+          model: "Panitera",
+          key: "id"
+        }
       },
       id_penuntut_umum: {
-        allowNull: false,
-        type: Sequelize.UUID
+        allowNull: true,
+        type: Sequelize.UUID,
+        references: {
+          model: "PenuntutUmum",
+          key: "id"
+        }
       },
       amar_lainya: {
         allowNull: true,
