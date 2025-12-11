@@ -11,11 +11,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.Klasifikasi, {
-        foreignKey: "id_klasifikasi",
-        as: "klasifikasi"
-      });
-
       this.belongsTo(models.KataKunci, {
         foreignKey: "id_kata_kunci",
         as: "kata_kunci"
@@ -66,9 +61,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    id_klasifikasi: {
-      type: DataTypes.UUID,
-      allowNull: false
+    klasifikasi: {
+      type: DataTypes.STRING,
+      allowNull: true
     },
     id_kata_kunci: {
       type: DataTypes.UUID,
@@ -141,7 +136,7 @@ module.exports = (sequelize, DataTypes) => {
     },
 
     lembaga_id : {
-      type: DataTypes.UUID,
+      type: DataTypes.STRING,
       allowNull: false
     },
   }, {

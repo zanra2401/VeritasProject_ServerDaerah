@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('TerdakwaPutusan', {
+    await queryInterface.createTable('PutusanTerdakwa', {
       id_terdakwa: {
         type: Sequelize.UUID,
         references: {
@@ -26,10 +26,14 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW
+      },
+      deleted_at: {
+        allowNull: true,
+        type: Sequelize.DATE
       }
     });
 
-    await queryInterface.addConstraint('TerdakwaPutusan', {
+    await queryInterface.addConstraint('PutusanTerdakwa', {
       fields: ["id_terdakwa", "id_putusan"],
       type: "primary key",
       name: "putusan-terdakwa-pk"
@@ -37,6 +41,6 @@ module.exports = {
 
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('TerdakwaPutusan');
+    await queryInterface.dropTable('PutusanTerdakwa');
   }
 };

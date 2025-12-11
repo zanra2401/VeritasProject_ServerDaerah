@@ -1,13 +1,13 @@
-const { PenuntutUmum } = require(__dirname + "/../models");
+const { Klasifikasi } = require(__dirname + "/../models");
 
 module.exports = {
-    // Get all PenuntutUmum
-    getAllPenuntutUmum: async (req, res) => {
+    // Get all Klasifikasi
+    getAllKlasifikasi: async (req, res) => {
         try {
             const { page = 1, limit = 10, search = '' } = req.query;
             const offset = (page - 1) * limit;
             
-            const { count, rows } = await PenuntutUmum.findAndCountAll({
+            const { count, rows } = await Klasifikasi.findAndCountAll({
                 where: search ? { nama: { [require('sequelize').Op.like]: `%${search}%` } } : {},
                 limit: parseInt(limit),
                 offset: offset
@@ -33,16 +33,16 @@ module.exports = {
         }
     },
 
-    // Get PenuntutUmum by ID
-    getPenuntutUmumById: async (req, res) => {
+    // Get Klasifikasi by ID
+    getKlasifikasiById: async (req, res) => {
         try {
             const { id } = req.params;
-            const penuntutUmum = await PenuntutUmum.findByPk(id);
+            const klasifikasi = await Klasifikasi.findByPk(id);
             
-            if (!penuntutUmum) {
+            if (!klasifikasi) {
                 return res.status(404).type('json').json({
                     "error": true,
-                    "message": "PenuntutUmum not found",
+                    "message": "Klasifikasi not found",
                     "data": []
                 });
             }
@@ -50,7 +50,7 @@ module.exports = {
             return res.status(200).type('json').json({
                 "error": false,
                 "message": "Success",
-                "data": penuntutUmum
+                "data": klasifikasi
             });
         } catch (err) {
             return res.status(500).type('json').json({
@@ -61,16 +61,17 @@ module.exports = {
         }
     },
 
-    // Create PenuntutUmum
-    createPenuntutUmum: async (req, res) => {
-        const payload = req.body;
+    // Create Klasifikasi
+    createKlasifikasi: async (req, res) => {
+        const { nama } = req.body;
+
         try {
-            const penuntutUmum = await PenuntutUmum.create(payload);
+            const klasifikasi = await Klasifikasi.create({ nama });
             
             return res.status(201).type('json').json({
                 "error": false,
-                "message": "PenuntutUmum created successfully",
-                "data": penuntutUmum
+                "message": "Klasifikasi created successfully",
+                "data": klasifikasi
             });
         } catch (err) {
             return res.status(500).type('json').json({
@@ -81,27 +82,27 @@ module.exports = {
         }
     },
 
-    // Update PenuntutUmum
-    updatePenuntutUmum: async (req, res) => {
+    // Update Klasifikasi
+    updateKlasifikasi: async (req, res) => {
         try {
             const { id } = req.params;
-            const payload = req.body;
+            const { nama } = req.body;
             
-            const penuntutUmum = await PenuntutUmum.findByPk(id);
-            if (!penuntutUmum) {
+            const klasifikasi = await Klasifikasi.findByPk(id);
+            if (!klasifikasi) {
                 return res.status(404).type('json').json({
                     "error": true,
-                    "message": "PenuntutUmum not found",
+                    "message": "Klasifikasi not found",
                     "data": []
                 });
             }
             
-            await penuntutUmum.update(payload);
+            await klasifikasi.update({ nama });
             
             return res.status(200).type('json').json({
                 "error": false,
-                "message": "PenuntutUmum updated successfully",
-                "data": penuntutUmum
+                "message": "Klasifikasi updated successfully",
+                "data": klasifikasi
             });
         } catch (err) {
             return res.status(500).type('json').json({
@@ -112,25 +113,25 @@ module.exports = {
         }
     },
 
-    // Delete PenuntutUmum
-    deletePenuntutUmum: async (req, res) => {
+    // Delete Klasifikasi
+    deleteKlasifikasi: async (req, res) => {
         try {
             const { id } = req.params;
             
-            const penuntutUmum = await PenuntutUmum.findByPk(id);
-            if (!penuntutUmum) {
+            const klasifikasi = await Klasifikasi.findByPk(id);
+            if (!klasifikasi) {
                 return res.status(404).type('json').json({
                     "error": true,
-                    "message": "PenuntutUmum not found",
+                    "message": "Klasifikasi not found",
                     "data": []
                 });
             }
             
-            await penuntutUmum.destroy();
+            await klasifikasi.destroy();
             
             return res.status(200).type('json').json({
                 "error": false,
-                "message": "PenuntutUmum deleted successfully",
+                "message": "Klasifikasi deleted successfully",
                 "data": []
             });
         } catch (err) {

@@ -13,6 +13,10 @@ module.exports = {
       nama: {
         type: Sequelize.STRING
       },
+      deleted_at: {
+        allowNull: true,
+        type: Sequelize.DATE
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,

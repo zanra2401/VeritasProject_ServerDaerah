@@ -18,7 +18,6 @@ module.exports = {
     const dataTerdakwa = new Map();
     const dataPenuntutUmum = new Map();
     const dataHakim = new Map();
-    const dataKlasifikasi = new Map();
 
     await new Promise((resolve, reject) => {
       const inputStream = fs.createReadStream(inputStreamPath, "utf-8");
@@ -45,11 +44,9 @@ module.exports = {
             const hakimId = dataHakim.get(namaHakim)?.id || uuidv4();
             const paniteraId = dataPanitera.get(namaPanitera)?.id || uuidv4();
             const kataKunciId = dataKataKunci.get(kataKunci)?.id || uuidv4();
-            const klasifikasiId = dataKlasifikasi.get(klasifikasi)?.id || uuidv4();
 
             helper.appendHakimKetua(dataHakim, hakimId, item);
             helper.appendKataKunci(dataKataKunci, kataKunciId, item);
-            helper.appendKlasifikasi(dataKlasifikasi, klasifikasiId, item);
             helper.appendPanitera(dataPanitera, paniteraId, item);
             helper.appendPenuntutUmum(dataPenuntutUmum, penuntutId, item);
             helper.appendPutusan(
@@ -60,7 +57,7 @@ module.exports = {
               paniteraId,
               penuntutId,
               kataKunciId,
-              klasifikasiId
+              klasifikasi
             );
             helper.appendTerdakwa(dataTerdakwa, dataTerdakwaPutusan, putusanId, item);
             helper.appendHakimAnggota(
@@ -79,7 +76,6 @@ module.exports = {
             console.log(dataKataKunci);
             const dataHakimArr = Array.from(dataHakim.values());
             const dataKataKunciArr = Array.from(dataKataKunci.values());
-            const dataKlasifikasiArr = Array.from(dataKlasifikasi.values());
             const dataPaniteraArr = Array.from(dataPanitera.values());
             const dataPenuntutUmumArr = Array.from(dataPenuntutUmum.values());
             const dataTerdakwaArr = Array.from(dataTerdakwa.values());
@@ -89,9 +85,6 @@ module.exports = {
 
             await queryInterface.bulkInsert("KataKunci", dataKataKunciArr);
             console.log("Kata Kunci inserted");
-
-            await queryInterface.bulkInsert("Klasifikasi", dataKlasifikasiArr);
-            console.log("Klasifikasi inserted");
 
             await queryInterface.bulkInsert("Panitera", dataPaniteraArr);
             console.log("Panitera inserted");
@@ -108,8 +101,8 @@ module.exports = {
             await queryInterface.bulkInsert("PutusanHakim", dataPutusanHakim);
             console.log("PutusanHakim inserted");
 
-            await queryInterface.bulkInsert("TerdakwaPutusan", dataTerdakwaPutusan);
-            console.log("TerdakwaPutusan inserted");
+            await queryInterface.bulkInsert("PutusanTerdakwa", dataTerdakwaPutusan);
+            console.log("PutusanTerdakwa inserted");
 
             console.log("Semua data berhasil diinsert!");
             resolve();

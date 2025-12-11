@@ -25,13 +25,9 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      id_klasifikasi: {
-        allowNull: false,
-        type: Sequelize.UUID,
-        references: {
-          model: "Klasifikasi",
-          key: "id"
-        }
+      klasifikasi: {
+        allowNull: true,
+        type: Sequelize.STRING
       },
       id_kata_kunci: {
         allowNull: false,
@@ -58,6 +54,10 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW
       },
+      deleted_at: {
+        allowNull: true,
+        type: Sequelize.DATE
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -69,7 +69,7 @@ module.exports = {
         defaultValue: Sequelize.NOW
       },
       amar_putusan: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.TEXT
       },
       id_hakim_ketua: {
@@ -85,7 +85,7 @@ module.exports = {
         type: Sequelize.UUID
       },
       id_penuntut_umum: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.UUID
       },
       amar_lainya: {

@@ -3,7 +3,7 @@
 const { v4: uuidv4 } = require("uuid");
 
 module.exports = {
-  appendPutusan: (data, row, id, id_hakim_ketua, id_panitera, id_penuntut_umum, id_kata_kunci, id_klasifikasi) => {
+  appendPutusan: (data, row, id, id_hakim_ketua, id_panitera, id_penuntut_umum, id_kata_kunci, klasifikasi) => {
     const parseTanggal = (str) => {
       if (!str) return null;
       const bulanMap = {
@@ -24,7 +24,7 @@ module.exports = {
       id,
       nomor: row[2],
       tingkat_proses: row[3],
-      id_klasifikasi: id_klasifikasi,
+      klasifikasi: klasifikasi,
       id_kata_kunci: id_kata_kunci,
       tanggal_musyawarah: parseTanggal(row[16]),
       tahun: row[6],

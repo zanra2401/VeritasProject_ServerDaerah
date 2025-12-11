@@ -22,7 +22,7 @@ module.exports = {
       },
       deleted_at: {
         allowNull: true,
-        type: Sequelize.Date
+        type: Sequelize.DATE
       },
       created_at: {
         allowNull: false,

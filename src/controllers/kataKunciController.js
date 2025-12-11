@@ -1,13 +1,13 @@
-const { PenuntutUmum } = require(__dirname + "/../models");
+const { KataKunci } = require(__dirname + "/../models");
 
 module.exports = {
-    // Get all PenuntutUmum
-    getAllPenuntutUmum: async (req, res) => {
+    // Get all KataKunci
+    getAllKataKunci: async (req, res) => {
         try {
             const { page = 1, limit = 10, search = '' } = req.query;
             const offset = (page - 1) * limit;
             
-            const { count, rows } = await PenuntutUmum.findAndCountAll({
+            const { count, rows } = await KataKunci.findAndCountAll({
                 where: search ? { nama: { [require('sequelize').Op.like]: `%${search}%` } } : {},
                 limit: parseInt(limit),
                 offset: offset
@@ -33,16 +33,16 @@ module.exports = {
         }
     },
 
-    // Get PenuntutUmum by ID
-    getPenuntutUmumById: async (req, res) => {
+    // Get KataKunci by ID
+    getKataKunciById: async (req, res) => {
         try {
             const { id } = req.params;
-            const penuntutUmum = await PenuntutUmum.findByPk(id);
+            const kataKunci = await KataKunci.findByPk(id);
             
-            if (!penuntutUmum) {
+            if (!kataKunci) {
                 return res.status(404).type('json').json({
                     "error": true,
-                    "message": "PenuntutUmum not found",
+                    "message": "KataKunci not found",
                     "data": []
                 });
             }
@@ -50,7 +50,7 @@ module.exports = {
             return res.status(200).type('json').json({
                 "error": false,
                 "message": "Success",
-                "data": penuntutUmum
+                "data": kataKunci
             });
         } catch (err) {
             return res.status(500).type('json').json({
@@ -61,16 +61,17 @@ module.exports = {
         }
     },
 
-    // Create PenuntutUmum
-    createPenuntutUmum: async (req, res) => {
-        const payload = req.body;
+    // Create KataKunci
+    createKataKunci: async (req, res) => {
+        const { nama } = req.body;
+
         try {
-            const penuntutUmum = await PenuntutUmum.create(payload);
+            const kataKunci = await KataKunci.create({ nama });
             
             return res.status(201).type('json').json({
                 "error": false,
-                "message": "PenuntutUmum created successfully",
-                "data": penuntutUmum
+                "message": "KataKunci created successfully",
+                "data": kataKunci
             });
         } catch (err) {
             return res.status(500).type('json').json({
@@ -81,27 +82,27 @@ module.exports = {
         }
     },
 
-    // Update PenuntutUmum
-    updatePenuntutUmum: async (req, res) => {
+    // Update KataKunci
+    updateKataKunci: async (req, res) => {
         try {
             const { id } = req.params;
-            const payload = req.body;
+            const { nama } = req.body;
             
-            const penuntutUmum = await PenuntutUmum.findByPk(id);
-            if (!penuntutUmum) {
+            const kataKunci = await KataKunci.findByPk(id);
+            if (!kataKunci) {
                 return res.status(404).type('json').json({
                     "error": true,
-                    "message": "PenuntutUmum not found",
+                    "message": "KataKunci not found",
                     "data": []
                 });
             }
             
-            await penuntutUmum.update(payload);
+            await kataKunci.update({ nama });
             
             return res.status(200).type('json').json({
                 "error": false,
-                "message": "PenuntutUmum updated successfully",
-                "data": penuntutUmum
+                "message": "KataKunci updated successfully",
+                "data": kataKunci
             });
         } catch (err) {
             return res.status(500).type('json').json({
@@ -112,25 +113,25 @@ module.exports = {
         }
     },
 
-    // Delete PenuntutUmum
-    deletePenuntutUmum: async (req, res) => {
+    // Delete KataKunci
+    deleteKataKunci: async (req, res) => {
         try {
             const { id } = req.params;
             
-            const penuntutUmum = await PenuntutUmum.findByPk(id);
-            if (!penuntutUmum) {
+            const kataKunci = await KataKunci.findByPk(id);
+            if (!kataKunci) {
                 return res.status(404).type('json').json({
                     "error": true,
-                    "message": "PenuntutUmum not found",
+                    "message": "KataKunci not found",
                     "data": []
                 });
             }
             
-            await penuntutUmum.destroy();
+            await kataKunci.destroy();
             
             return res.status(200).type('json').json({
                 "error": false,
-                "message": "PenuntutUmum deleted successfully",
+                "message": "KataKunci deleted successfully",
                 "data": []
             });
         } catch (err) {
