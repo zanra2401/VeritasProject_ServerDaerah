@@ -2,10 +2,15 @@
 
 const csvReader = require("csv-reader");
 const fs = require("fs");
-const { v4: uuidv4 } = require("uuid");
+const { v4: uuidv4, v5: uuidv5 } = require("uuid");
 const helper = require("./module/helper.js");
 
 const inputStreamPath = __dirname + "/metaPidanaUmum.csv";
+
+// Namespace untuk UUID v5 agar konsisten dengan ServerPusat
+const PUTUSAN_NAMESPACE = "6f42f5f2-7d4c-4a9c-b3d0-91f4b3c2e9aa";
+
+const uuidFromNomor = (nomor) => uuidv5((nomor || "").trim().toLowerCase(), PUTUSAN_NAMESPACE);
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -39,7 +44,8 @@ module.exports = {
             const kataKunci = item[5]?.trim().toLowerCase();
             const klasifikasi = item[4]?.trim().toLowerCase();
 
-            const putusanId = uuidv4();
+            // Gunakan UUID deterministik berbasis nomor putusan supaya id sama dengan ServerPusat
+            const putusanId = uuidFromNomor(item[2]);
             const penuntutId = dataPenuntutUmum.get(namaPenuntut)?.id || uuidv4();
             const hakimId = dataHakim.get(namaHakim)?.id || uuidv4();
             const paniteraId = dataPanitera.get(namaPanitera)?.id || uuidv4();
