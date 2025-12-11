@@ -2,6 +2,7 @@
 
 const csvReader = require("csv-reader");
 const fs = require("fs");
+const path = require("path");
 const { v4: uuidv4, v5: uuidv5 } = require("uuid");
 const helper = require("./module/helper.js");
 
@@ -14,6 +15,18 @@ const uuidFromNomor = (nomor, index = 0) => {
   // Tambah index ke nomor supaya jika ada duplikat nomor tetap generate UUID unik
   const seed = `${(nomor || "").trim().toLowerCase()}|row${index}`;
   return uuidv5(seed, PUTUSAN_NAMESPACE);
+};
+
+// Extract filename dari URL
+const getFilenameFromUrl = (url) => {
+  if (!url) return null;
+  try {
+    const pathname = new URL(url).pathname;
+    const filename = pathname.split("/").pop();
+    return filename || null;
+  } catch (err) {
+    return null;
+  }
 };
 
 /** @type {import('sequelize-cli').Migration} */
@@ -84,8 +97,22 @@ module.exports = {
         })
         .on("end", async () => {
           try {
-            console.log("CSV dibaca, mulai insert data...");
-            console.log(dataKataKunci);
+            console.log("CSV dibaca, mulai update URL dokumen dan insert data...");
+            
+            // Update url_dokumen dari URL original ke path lokal
+            dataPutusan.forEach((putusan) => {
+              if (putusan.url_dokumen) {
+                const filename = getFilenameFromUrl(putusan.url_dokumen);
+                if (filename) {
+                  // Tambah .pdf extension karena file di storage punya extension
+                  const filenameWithExt = filename.endsWith('.pdf') ? filename : `${filename}.pdf`;
+                  putusan.url_dokumen = `/storage/putusan/${filenameWithExt}`;
+                  console.log(`✓ URL updated: ${filenameWithExt}`);
+                }
+              }
+            });
+
+            console.log("\nMulai insert data ke database...");
             const dataHakimArr = Array.from(dataHakim.values());
             const dataKataKunciArr = Array.from(dataKataKunci.values());
             const dataPaniteraArr = Array.from(dataPanitera.values());
