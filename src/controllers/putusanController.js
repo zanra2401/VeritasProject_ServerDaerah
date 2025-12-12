@@ -4,6 +4,7 @@ const { Putusan, Hakim, Panitera, KataKunci, PenuntutUmum, Terdakwa } = require(
 const { Op } = require('sequelize');
 const path = require('path');
 const fs = require('fs');
+const SyncPublisher = require('../services/syncPublisher');
 
 module.exports = {
     // Get all Putusan with pagination
@@ -101,6 +102,9 @@ module.exports = {
             const payload = req.body;
             const putusan = await Putusan.create(payload);
             
+            // Publish event ke Redis untuk sinkronisasi
+            await SyncPublisher.publishPutusanCreated(putusan.toJSON());
+            
             return res.status(201).type("json").json({
                 "error": false,
                 "message": "Putusan created successfully",
@@ -132,6 +136,9 @@ module.exports = {
             
             await putusan.update(payload);
             
+            // Publish event ke Redis untuk sinkronisasi
+            await SyncPublisher.publishPutusanUpdated(putusan.toJSON());
+            
             return res.status(200).type("json").json({
                 "error": false,
                 "message": "Putusan updated successfully",
@@ -160,7 +167,11 @@ module.exports = {
                 });
             }
             
+            const putusanId = putusan.id;
             await putusan.destroy();
+            
+            // Publish event ke Redis untuk sinkronisasi
+            await SyncPublisher.publishPutusanDeleted(putusanId);
             
             return res.status(200).type("json").json({
                 "error": false,
